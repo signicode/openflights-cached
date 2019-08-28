@@ -1,0 +1,4 @@
+{
+    "extends": ["scramjet"],
+    "root": true
+}

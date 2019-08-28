@@ -1,0 +1,16 @@
+{
+  "name": "openflights-cached",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "scramjet": "^4.25.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "postinstall": "bin/fetch.js",
+    "test": "test/index.js"
+  },
+  "author": "Signicode <open-source@signicode.com>",
+  "license": "MIT"
+}
