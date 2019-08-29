@@ -1,10 +1,17 @@
 {
   "name": "openflights-cached",
   "version": "1.0.1",
-  "description": "",
+  "description": "A module that fetches newest OpenFlights airport data upon install and exposes in simple API allowing to search by ICAO and IATA codes.",
+  "keywords": [
+    "iata", "icao", "openflights", "airports", "locations", "timezones"
+  ],
   "main": "index.js",
   "dependencies": {
     "scramjet": "^4.25.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/signicode/openflights-cached.git"
   },
   "devDependencies": {},
   "scripts": {
