@@ -2,7 +2,6 @@
 
 const assert = require("assert");
 
-
 assert.doesNotThrow(() => {
     require("../array");
     require("../icao");
@@ -19,6 +18,7 @@ assert.doesNotThrow(() => {
         {"airportid":"679","name":"Warsaw Chopin Airport","city":"Warsaw","country":"Poland","iata":"WAW","icao":"EPWA","latitude":"52.1656990051","longitude":"20.967100143399996","altitude":"362","timezone":"1","dst":"E","tz":"Europe/Warsaw","type":"airport","source":"OurAirports"},
         "Should return Warsaw!"
     );
+    console.error("✔ array test succeeded")
 
 
 })();
@@ -32,6 +32,7 @@ assert.doesNotThrow(() => {
         {"airportid":"580","name":"Amsterdam Airport Schiphol","city":"Amsterdam","country":"Netherlands","iata":"AMS","icao":"EHAM","latitude":"52.308601","longitude":"4.76389","altitude":"-11","timezone":"1","dst":"E","tz":"Europe/Amsterdam","type":"airport","source":"OurAirports"},
         "Should return Amsterdam!"
     );
+    console.error("✔ icao test succeeded")
 })();
 
 
@@ -44,4 +45,5 @@ assert.doesNotThrow(() => {
         {"airportid":"3797","name":"John F Kennedy International Airport","city":"New York","country":"United States","iata":"JFK","icao":"KJFK","latitude":"40.63980103","longitude":"-73.77890015","altitude":"13","timezone":"-5","dst":"A","tz":"America/New_York","type":"airport","source":"OurAirports"},
         "Should return JFK!"
     );
+    console.error("✔ iata test succeeded")
 })();

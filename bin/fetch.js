@@ -8,7 +8,7 @@ const {get} = require("https");
 
 (async () => {
     const out = await new Promise(
-        s => get('https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat', {}, (stream) => s(stream))
+        s => get('https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat', (stream) => s(stream))
     );
 
     const columns = [
