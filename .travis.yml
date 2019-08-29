@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "node"
+  - "10"
+  - "8"
+script: npm test
+cache:
+  apt: true
+  directories:
+  - "$HOME/.npm"
