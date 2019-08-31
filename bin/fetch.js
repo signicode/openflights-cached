@@ -1,14 +1,17 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const {resolve} = require('path');
-const {StringStream} = require('scramjet');
+
+/** eslint-disable node/shebang */
+
+const fs = require("fs");
+const {resolve} = require("path");
+const {StringStream, DataStream} = require("scramjet");
 const {promisify} = require("util");
 
 const {get} = require("https");
 
 (async () => {
     const out = await new Promise(
-        s => get('https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat', (stream) => s(stream))
+        s => get("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", (stream) => s(stream))
     );
 
     const columns = [
@@ -28,28 +31,33 @@ const {get} = require("https");
         "source",    //	Source of this data. "OurAirports" for data sourced from OurAirports, "Legacy" for old data not matched to OurAirports (mostly DAFIF), "User" for unverified user contributions. In airports.csv, only source=OurAirports is included.
     ];
 
-    // const nullable = {};
-    return StringStream.from(out, {})
+    /**
+     * @type {DataStream}
+     */
+    const stream = StringStream.from(out, {})
         .CSVParse()
-        .map(x => x.slice().map((col,i) => col === '\\N' ? (/* nullable[columns[i]] = true, */'') : col))
+        .map(x => x.slice().map(col => col === "\\N" ? "" : col))
         .map(x => {
-            const out = {}
-            for (let i = 0; i < columns.length; i++) out[columns[i]] = x[i]
+            const out = {};
+            for (let i = 0; i < columns.length; i++) out[columns[i]] = x[i];
 
             return out;
-        })
-        .tee(stream => stream.toJSONArray().pipe(fs.createWriteStream(resolve(__dirname, "../dist/array.json"))))
-        .tee(stream => stream.filter(item => item.iata).toJSONObject(item => item.iata).pipe(fs.createWriteStream(resolve(__dirname, "../dist/iata.json"))))
-        .tee(stream => stream.filter(item => item.icao).toJSONObject(item => item.icao).pipe(fs.createWriteStream(resolve(__dirname, "../dist/icao.json"))))
-        .run()
-        // .then(() => console.log(nullable))
-    ;
+        });
 
+    stream.tap();
+
+    return Promise.all([
+        new Promise((s, j) => stream.pipe(new DataStream({}), {}).toJSONArray().pipe(fs.createWriteStream(resolve(__dirname, "../dist/array.json"))).on("finish", s).on("error", j)),
+        new Promise((s, j) => stream.pipe(new DataStream({}), {}).filter(item => item.iata).toJSONArray(["{\n","\n}"], ",\n", item => `"${item.iata}": "${item.icao}"`).pipe(fs.createWriteStream(resolve(__dirname, "../dist/iata2icao.json"))).on("finish", s).on("error", j)),
+        new Promise((s, j) => stream.pipe(new DataStream({}), {}).map(item => item.icao).toJSONArray().pipe(fs.createWriteStream(resolve(__dirname, "../dist/icaos.json"))).on("finish", s).on("error", j)),
+        new Promise((s, j) => stream.pipe(new DataStream({}), {}).filter(item => item.iata).toJSONObject(item => item.iata).pipe(fs.createWriteStream(resolve(__dirname, "../dist/iata.json"))).on("finish", s).on("error", j)),
+        new Promise((s, j) => stream.pipe(new DataStream({}), {}).filter(item => item.icao).toJSONObject(item => item.icao).pipe(fs.createWriteStream(resolve(__dirname, "../dist/icao.json"))).on("finish", s).on("error", j)),
+        stream.each(airport => promisify(fs.writeFile)(resolve(__dirname, `../dist/icaos/${airport.icao}.json`), JSON.stringify(airport), {flag:"w+"})).run(),
+    ]);
 })()
     .then(
         () => 0,
         (e) => {
-            console.error(e.stack);
-            process.exit(1);
+            throw e;
         }
-    )
+    );

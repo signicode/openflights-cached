@@ -18,10 +18,16 @@
     "type": "git",
     "url": "git+https://github.com/signicode/openflights-cached.git"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-scramjet": "^2.0.1",
+    "si": "^2.0.0"
+  },
+  "types": "./.d.ts/openflights-cached.d.ts",
   "scripts": {
+    "clean": "rm -rf dist && git checkout -- dist/",
     "postinstall": "bin/fetch.js",
-    "test": "test/index.js"
+    "test": "npx eslint . && test/index.js"
   },
   "author": "Signicode <open-source@signicode.com>",
   "license": "MIT"

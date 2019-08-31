@@ -122,5 +122,5 @@ declare module "openflights-cached" {
         iata2icao,
         findICAO,
         findIATA
-    };
+    }
 }

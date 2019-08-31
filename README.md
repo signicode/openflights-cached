@@ -12,11 +12,22 @@ Remeber that the data is fetched upon installation so it's always fresh, but als
 
 ## API
 
-There are three submodules to import:
+There are five submodules to import:
+
+### IATA2ICAO
+
+`openflights-cached/iata2icao` exposes a simple hash of IATA keys and ICAO values
+
+```javascript
+const openflights = require("openflights-cached/iata2icao");
+//    ^^^^^^^^^^^ - this here's an array
+
+const myAirport = openflights; // -> Warsaw Chopin
+```
 
 ### Array
 
-`openflights-cached/array` exposes an array of all [OpenFlight entries](#Entry+type) - the JSON is approx. 2.1 megs and will probably use similar amount of memory.
+`openflights-cached/array` exposes an array of all [OpenFlight entries](#Entry+type) - the JSON is approx. 2.1 megs and will probably use approx. double the amount of memory.
 
 ```javascript
 const openflights = require("openflights-cached/array");
@@ -27,7 +38,7 @@ const myAirport = openflights.find(({iata}) => iata === "WAW"); // -> Warsaw Cho
 
 ## ICAO
 
-`openflights-cached/icao` exposes an object of all [OpenFlight entries](#Entry+type) indexed by ICAO ids - the JSON is approx. 2.3 megs and will probably use similar amount of memory.
+`openflights-cached/icao` exposes an object of all [OpenFlight entries](#Entry+type) indexed by ICAO ids - the JSON is approx. 2.3 megs and will probably use approx. double the amount of memory.
 
 ```javascript
 const openflights = require("openflights-cached/icao");
@@ -38,7 +49,7 @@ const myAirport = openflights["EHAM"] // -> Amsterdam Schiphol
 
 ## IATA
 
-`openflights-cached/iata` exposes an object of all [OpenFlight entries](#Entry+type) indexed by IATA ids - the JSON is approx. 1.7 megs and will probably use similar amount of memory.
+`openflights-cached/iata` exposes an object of all [OpenFlight entries](#Entry+type) indexed by IATA ids - the JSON is approx. 1.7 megs and will probably use approx. double the amount of memory.
 
 ```javascript
 const openflights = require("openflights-cached/iata");
