@@ -9,8 +9,8 @@ const {promisify} = require("util");
 
 const {get} = require("https");
 
-const awaitWritten = (writable, path) => new Promise(
-    (s, j) => writable
+const awaitWritten = (stream, path) => new Promise(
+    (s, j) => stream
         .pipe(fs.createWriteStream(resolve(__dirname, path)))
         .on("finish", s).on("error", j)
 ).then();
@@ -36,6 +36,7 @@ const awaitWritten = (writable, path) => new Promise(
 
             return out;
         })
+        .each(airport => promisify(fs.writeFile)(resolve(__dirname, `../dist/icaos/${airport.icao}.json`), JSON.stringify(airport), {flag:"w+"}))
     ;
 
     stream.tap();
@@ -45,8 +46,7 @@ const awaitWritten = (writable, path) => new Promise(
         awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.iata).toJSONArray(["{\n","\n}"], ",\n", item => `"${item.iata}": "${item.icao}"`), "../dist/iata2icao.json"),
         awaitWritten(stream.pipe(new DataStream({}), {}).map(item => item.icao).toJSONArray(), "../dist/icaos.json"),
         awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.iata).toJSONObject(item => item.iata), "../dist/iata.json"),
-        awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.icao).toJSONObject(item => item.icao), "../dist/icao.json"),
-        stream.each(airport => promisify(fs.writeFile)(resolve(__dirname, `../dist/icaos/${airport.icao}.json`), JSON.stringify(airport), {flag:"w+"})).run(),
+        awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.icao).toJSONObject(item => item.icao), "../dist/icao.json")
     ]);
 })()
     .then(
