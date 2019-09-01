@@ -1,4 +1,8 @@
 {
     "extends": ["scramjet"],
+    "rules": {
+        "node/no-unpublished-require": 0,
+        "node/shebang": 0
+    },
     "root": true
 }

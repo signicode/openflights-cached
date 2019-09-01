@@ -57,27 +57,70 @@ interface OpenFlightEntry extends Object {
     source: string,
 }
 
+/** An array of all OpenFlight entries */
 declare module "openflights-cached/array" {
-    /** An array of all OpenFlight entries */
-    export const array: OpenFlightEntry[];
+    const array: OpenFlightEntry[];
+
+    export default array;
 }
 
+/** An object of OpenFlight entry values and icao ids as keys */
 declare module "openflights-cached/icao" {
+    const icao: { [icao: string]: OpenFlightEntry }
 
-    /** An object of OpenFlight entry values and icao ids as keys */
-    export const icao : { [icao: string]: OpenFlightEntry };
+    export default icao;
 }
 
+/** An object of OpenFlight entry values and iata ids as keys */
 declare module "openflights-cached/iata" {
-    /** An object of OpenFlight entry values and iata ids as keys */
-    export const iata : { [iata: string]: OpenFlightEntry };
+    const iata: { [iata: string]: OpenFlightEntry }
+
+    export default iata;
+}
+
+
+/** An object of iata ids as keys and icao ids as values */
+declare module "openflights-cached/iata2icao" {
+    const iata2icao: { [iata: string]: string };
+
+    export default iata2icao;
+}
+
+/** An array of all ICAO ids */
+declare module "openflights-cached/icaos" {
+    const icaos: string[];
+
+    export default icaos;
 }
 
 /**
  * Exports all objects - it's recommended not to use this import.
  */
 declare module "openflights-cached" {
-    export { iata } from "openflights-cached/iata"
-    export { icao } from "openflights-cached/icao";
-    export { array } from "openflights-cached/array";
+    import iata from "openflights-cached/iata"
+    import icao from "openflights-cached/icao";
+    import array from "openflights-cached/array";
+    import iata2icao from "openflights-cached/iata2icao";
+    import icaos from "openflights-cached/icaos";
+
+    /**
+     * Fetches a single airport data for the given icao id.
+     * @param icao the airport ICAO id to fetch
+     */
+    function findICAO ( icao : string ) : OpenFlightEntry | null;
+    /**
+     * Fetches a single airport data for the given iata id.
+     * @param iata the airport IATA id to fetch
+     */
+    function findIATA ( iata : string ) : OpenFlightEntry | null;
+
+    export {
+        iata,
+        icao,
+        array,
+        icaos,
+        iata2icao,
+        findICAO,
+        findIATA
+    }
 }

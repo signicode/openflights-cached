@@ -10,13 +10,60 @@ $ npm install -s openflights-cached
 
 Remeber that the data is fetched upon installation so it's always fresh, but also needs a connection to the NPM repo.
 
-## API
+## Module API
 
-There are three submodules to import:
+The module API exposes a number of methods allowing different ways to access OpenFlights data. The recommended ones are with the two lookup methods:
+
+```javascript
+const openflights = require("openflights-cached");
+
+console.log(openflights.findIATA("PEK").name);
+// -> Beijing Capital International Airport
+
+console.log(openflights.findICAO("SBUA").country)
+// -> Brazil
+```
+
+These methods use simple lookup methods without loading any large data sets.
+
+### Exports
+
+`openflights-cached` exports the following methods and properties:
+
+* `findICAO(icao: string): OpenFlightsEntry` - find airport data for ICAO code
+* `findIATA(iata: string): OpenFlightsEntry` - find airport data for IATA code
+* `iata2icao: {[iata: string]: string}` - lazy loader for [`openflights-cached/iata2icao`](#IATA2ICAO)
+* `icaos` - lazy loader for [`openflights-cached/icaos`](#ICAOs)
+* `array` - lazy loader for [`openflights-cached/array`](#Array)
+* `icao` - lazy loader for [`openflights-cached/icao`](#ICAO)
+* `iata` - lazy loader for [`openflights-cached/iata`](#IATA)
+
+### IATA2ICAO
+
+`openflights-cached/iata2icao` exposes a simple hash of IATA keys and ICAO values.
+
+```javascript
+const openflights = require("openflights-cached/iata2icao");
+//    ^^^^^^^^^^^ - this here's an object
+
+const myAirport = openflights.BCN; // -> LEBL
+```
+
+### ICAOs
+
+`openflights-cached/icaos` exposes a simple array of all ICAO ids.
+
+```javascript
+const openflights = require("openflights-cached/icaos");
+//    ^^^^^^^^^^^ - this here's an array
+
+const myAirport = openflights.includes('KLAS') // has Las Vegas
+const myAirport = openflights.includes('KLAK') // this is a typo
+```
 
 ### Array
 
-`openflights-cached/array` exposes an array of all [OpenFlight entries](#Entry+type) - the JSON is approx. 2.1 megs and will probably use similar amount of memory.
+`openflights-cached/array` exposes an array of all [OpenFlight entries](#Entry type) - the JSON is approx. 2.1 megs and will probably use approx. double the amount of memory.
 
 ```javascript
 const openflights = require("openflights-cached/array");
@@ -27,7 +74,7 @@ const myAirport = openflights.find(({iata}) => iata === "WAW"); // -> Warsaw Cho
 
 ## ICAO
 
-`openflights-cached/icao` exposes an object of all [OpenFlight entries](#Entry+type) indexed by ICAO ids - the JSON is approx. 2.3 megs and will probably use similar amount of memory.
+`openflights-cached/icao` exposes an object of all [OpenFlight entries](#Entry+type) indexed by ICAO ids - the JSON is approx. 2.3 megs and will probably use approx. double the amount of memory.
 
 ```javascript
 const openflights = require("openflights-cached/icao");
@@ -38,7 +85,7 @@ const myAirport = openflights["EHAM"] // -> Amsterdam Schiphol
 
 ## IATA
 
-`openflights-cached/iata` exposes an object of all [OpenFlight entries](#Entry+type) indexed by IATA ids - the JSON is approx. 1.7 megs and will probably use similar amount of memory.
+`openflights-cached/iata` exposes an object of all [OpenFlight entries](#Entry+type) indexed by IATA ids - the JSON is approx. 1.7 megs and will probably use approx. double the amount of memory.
 
 ```javascript
 const openflights = require("openflights-cached/iata");
@@ -49,7 +96,7 @@ const myAirport = openflights["JFK"] // -> New York, JFK
 
 ### Entry type
 
-Each entry is an object with the following keys:
+Each entry exposed by the module is type of OpenFlightsEntry is an object with the following keys:
 
 * **airportid**: string - Unique OpenFlights identifier for this airport.
 * **name**: string - Name of airport. May or may not contain the City name.
@@ -65,7 +112,6 @@ Each entry is an object with the following keys:
 * **\[tz\]**: string - database time zone	Timezone in "tz" (Olson) format, eg. "America/Los_Angeles".
 * **type**: string - Type of the airport. Value "airport" for air terminals, "station" for train stations, "port" for ferry terminals and "unknown" if not known. In airports.csv, only type=airport is included.
 * **source**: string - Source of this data. "OurAirports" for data sourced from OurAirports, "Legacy" for old data not matched to OurAirports (mostly DAFIF), "User" for unverified user contributions.
-
 
 ## License
 
