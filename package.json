@@ -12,7 +12,7 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "scramjet": "^4.25.8"
+    "scramjet": "^4.26.0"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   "scripts": {
     "clean": "rm -rf dist && git checkout -- dist/",
     "postinstall": "bin/fetch.js",
+    "integrity": "x=0; for f in `find ./dist/ -maxdepth 1 -type f`; do cat $f | jq type; x=$(($x + $?)); done; test $x = 0",
     "test": "npx eslint . && test/index.js"
   },
   "author": "Signicode <open-source@signicode.com>",
