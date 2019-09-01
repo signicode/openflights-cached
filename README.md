@@ -12,6 +12,20 @@ Remeber that the data is fetched upon installation so it's always fresh, but als
 
 ## Module API
 
+The module API exposes a number of methods allowing different ways to access OpenFlights data. The recommended ones are with the two lookup methods:
+
+```javascript
+const openflights = require("openflights-cached");
+
+console.log(openflights.findIATA("PEK").name);
+// -> Beijing Capital International Airport
+
+console.log(openflights.findICAO("SBUA").country)
+// -> Brazil
+```
+
+These methods use simple lookup methods without loading any large data sets.
+
 ### Exports
 
 `openflights-cached` exports the following methods and properties:
@@ -23,8 +37,6 @@ Remeber that the data is fetched upon installation so it's always fresh, but als
 * `array` - lazy loader for [`openflights-cached/array`](#Array)
 * `icao` - lazy loader for [`openflights-cached/icao`](#ICAO)
 * `iata` - lazy loader for [`openflights-cached/iata`](#IATA)
-
-There are five submodules to import:
 
 ### IATA2ICAO
 
