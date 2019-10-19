@@ -12,14 +12,14 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "scramjet": "^4.27.0"
+    "scramjet": "^4.27.1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/signicode/openflights-cached.git"
   },
   "devDependencies": {
-    "eslint": "^6.4.0",
+    "eslint": "^6.5.1",
     "eslint-config-scramjet": "^2.0.1",
     "si": "^2.0.0"
   },
