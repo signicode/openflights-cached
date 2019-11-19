@@ -40,6 +40,8 @@ const awaitWritten = (stream, path) => {
         .each(() => i++)
     ;
 
+    const dirs = {};
+
     return Promise.all([
         awaitWritten(stream.pipe(new DataStream({}), {}).toJSONArray(), "../dist/array.json"),
         awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.iata).toJSONArray(
@@ -49,7 +51,16 @@ const awaitWritten = (stream, path) => {
         awaitWritten(stream.pipe(new DataStream({}), {}).map(item => item.icao).toJSONArray(), "../dist/icaos.json"),
         awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.iata).toJSONObject(item => item.iata), "../dist/iata.json"),
         awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.icao).toJSONObject(item => item.icao), "../dist/icao.json"),
-        stream.consume(airport => promisify(fs.writeFile)(resolve(__dirname, `../dist/icaos/${airport.icao}.json`), JSON.stringify(airport), {flag:"w+"}))
+        stream.consume(async airport => {
+            const dir = resolve(__dirname, `../dist/icaos/${airport.icao.substr(0, 1)}`);
+            if (!dirs[dir]) {
+                dirs[dir] = promisify(fs.stat)(dir)
+                    .catch(() => null)
+                    .then(exists => exists || promisify(fs.mkdir)(dir));
+            }
+            await dirs[dir];
+            await promisify(fs.writeFile)(resolve(dir, `${airport.icao}.json`), JSON.stringify(airport), {flag:"w+"});
+        })
     ]);
 })()
     .then(

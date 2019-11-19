@@ -7,7 +7,7 @@ const lazy = {
     entries: {}
 };
 
-const requireicao = (id) => self.icaos.includes(id) && require(`./dist/icaos/${id}.json`);
+const requireicao = (id) => self.icaos.includes(id) && require(`./dist/icaos/${id.substr(0,1)}/${id}.json`);
 
 const index = (aoo) => {
     const entries = Array.isArray(aoo) ? aoo : Object.values(aoo);
