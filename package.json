@@ -12,7 +12,7 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "scramjet": "^4.27.4"
+    "scramjet": "^4.27.5"
   },
   "repository": {
     "type": "git",
