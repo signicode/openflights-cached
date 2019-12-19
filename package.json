@@ -11,6 +11,9 @@
     "timezones"
   ],
   "main": "index.js",
+  "engines": {
+    "node": ">=10"
+  },
   "dependencies": {
     "scramjet": "^4.27.5"
   },

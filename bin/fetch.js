@@ -2,6 +2,9 @@
 
 /** eslint-disable node/shebang */
 
+const OPENFLIGHTS_URL = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat";
+const WAIT_BETWEEN_ATTEMPTS = 1e4;
+
 const fs = require("fs");
 const {resolve} = require("path");
 const {StringStream, DataStream} = require("scramjet");
@@ -18,16 +21,28 @@ const awaitWritten = (stream, path) => {
 };
 
 (async () => {
-    const out = await new Promise(
-        s => get("https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat", (stream) => s(stream)).end()
-    );
+    const fetch = () => new Promise(s => get(OPENFLIGHTS_URL, stream => s(stream)).end());
 
     const columns = [
         "airportid", "name", "city", "country", "iata", "icao", "latitude", "longitude", "altitude", "timezone", "dst", "tz", "type", "source"
     ];
-
+    
     let i = 0; let j = 0;
-    const stream = StringStream.from(out, {})
+    const stream = StringStream.from(async function() {
+        let retries = 5;
+        while (retries-- > 0) {
+            /** @type {import("http").IncomingMessage} */
+            const ret = await fetch();
+            if (ret.statusCode >= 200 && ret.statusCode < 300)
+                return ret;
+            if (ret.statusCode >= 400 && ret.statusCode < 500)
+                throw new Error("400 error!");
+            await new Promise(s => setTimeout(s, WAIT_BETWEEN_ATTEMPTS));
+
+            console.error("Retry...");
+        }
+        throw new Error("Too many errors...");
+    }, {})
         .CSVParse()
         .each(() => j++)
         .map(x => x.map(col => col === "\\N" ? "" : col))
