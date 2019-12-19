@@ -38,6 +38,8 @@ const awaitWritten = (stream, path) => {
             if (ret.statusCode >= 400 && ret.statusCode < 500)
                 throw new Error("400 error!");
             await new Promise(s => setTimeout(s, WAIT_BETWEEN_ATTEMPTS));
+
+            console.error("Retry...");
         }
         throw new Error("Too many errors...");
     }, {})
