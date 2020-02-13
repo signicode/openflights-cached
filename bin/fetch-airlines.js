@@ -4,7 +4,7 @@
 
 // Airlines adaption
 
-const DIGITS_AND_LETTERS = /^[0-9a-zA-Z]+$/;
+const DIGITS_ANDOR_LETTERS = /^[0-9a-zA-Z]+$/;
 
 const OPENFLIGHTS_URL = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat";
 const WAIT_BETWEEN_ATTEMPTS = 1e4;
@@ -55,7 +55,7 @@ const awaitWritten = (stream, path) => {
             for (let i = 0; i < columns.length; i++) {
                 if (i === 3 || i === 4) {
                     // Ignore bad iatas and icaos.
-                    if(!x[i].match(DIGITS_AND_LETTERS)) x[i] = "";
+                    if(!x[i].match(DIGITS_ANDOR_LETTERS)) x[i] = "";
                 }
                 out[columns[i]] = x[i];
             }
