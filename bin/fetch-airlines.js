@@ -53,7 +53,7 @@ const awaitWritten = (stream, path) => {
         .map(x => {
             const out = {};
             for (let i = 0; i < columns.length; i++) {
-                if (i === 3 || i === 4) {
+                if (columns[i] == 'iata' || columns[i] == 'icao') {
                     // Ignore bad iatas and icaos.
                     if(!x[i].match(DIGITS_ANDOR_LETTERS)) x[i] = "";
                 }
