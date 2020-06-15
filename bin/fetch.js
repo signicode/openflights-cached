@@ -27,7 +27,6 @@ const awaitWritten = (stream, path) => {
         "airportid", "name", "city", "country", "iata", "icao", "latitude", "longitude", "altitude", "timezone", "dst", "tz", "type", "source"
     ];
 
-    let i = 0; let j = 0;
     const stream = StringStream.from(async function() {
         let retries = 5;
         while (retries-- > 0) {
@@ -52,8 +51,6 @@ const awaitWritten = (stream, path) => {
                     const col = x[i];
                     out[columns[i]] = col === "\\N" ? "" : col;
                 }
-
-                j++;
 
                 return out;
             });
