@@ -26,8 +26,7 @@ const awaitWritten = (stream, path) => {
     const columns = [
         "airportid", "name", "city", "country", "iata", "icao", "latitude", "longitude", "altitude", "timezone", "dst", "tz", "type", "source"
     ];
-    
-    let i = 0; let j = 0;
+
     const stream = StringStream.from(async function() {
         let retries = 5;
         while (retries-- > 0) {
@@ -44,15 +43,19 @@ const awaitWritten = (stream, path) => {
         throw new Error("Too many errors...");
     }, {})
         .CSVParse()
-        .each(() => j++)
-        .map(x => x.map(col => col === "\\N" ? "" : col))
-        .map(x => {
-            const out = {};
-            for (let i = 0; i < columns.length; i++) out[columns[i]] = x[i];
+        .batch(100)
+        .map(arr => {
+            return arr.map(x => {
+                const out = {};
+                for (let i = 0; i < columns.length; i++) {
+                    const col = x[i];
+                    out[columns[i]] = col === "\\N" ? "" : col;
+                }
 
-            return out;
+                return out;
+            });
         })
-        .each(() => i++)
+        .flatten()
     ;
 
     const dirs = {};
