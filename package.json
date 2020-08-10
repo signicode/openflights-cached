@@ -15,14 +15,14 @@
     "node": ">=10"
   },
   "dependencies": {
-    "scramjet": "^4.33.5"
+    "scramjet": "^4.34.1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/signicode/openflights-cached.git"
   },
   "devDependencies": {
-    "eslint": "^7.3.1",
+    "eslint": "^7.6.0",
     "eslint-config-scramjet": "^2.0.1",
     "si": "^2.0.0"
   },
