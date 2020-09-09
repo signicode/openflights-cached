@@ -74,7 +74,7 @@ const awaitWritten = (stream, path) => {
             if (!dirs[dir]) {
                 dirs[dir] = promisify(fs.stat)(dir)
                     .catch(() => null)
-                    .then(exists => exists || promisify(fs.mkdir)(dir));
+                    .then(exists => exists || promisify(fs.mkdir)(dir, { recursive: true }));
             }
             await dirs[dir];
             await promisify(fs.writeFile)(resolve(dir, `${airport.icao}.json`), JSON.stringify(airport), {flag:"w+"});
