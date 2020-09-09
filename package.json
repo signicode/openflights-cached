@@ -15,7 +15,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "scramjet": "^4.34.4"
+    "scramjet": "^4.34.5"
   },
   "repository": {
     "type": "git",
