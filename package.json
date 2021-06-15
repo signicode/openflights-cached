@@ -22,7 +22,7 @@
     "url": "git+https://github.com/signicode/openflights-cached.git"
   },
   "devDependencies": {
-    "eslint": "^7.26.0",
+    "eslint": "^7.28.0",
     "eslint-config-scramjet": "^3.0.0",
     "si": "^2.0.0"
   },
