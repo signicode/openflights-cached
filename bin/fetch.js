@@ -60,6 +60,11 @@ const awaitWritten = (stream, path) => {
 
     const dirs = {};
 
+    const distDir = resolve(__dirname, '../dist');
+    if (!fs.existsSync(distDir)) {
+        fs.mkdirSync(distDir);
+    }
+
     return Promise.all([
         awaitWritten(stream.pipe(new DataStream({}), {}).toJSONArray(), "../dist/array.json"),
         awaitWritten(stream.pipe(new DataStream({}), {}).filter(item => item.iata).toJSONArray(
